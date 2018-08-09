@@ -20,7 +20,6 @@ function love.load()
     p1_score = 0
     p2_score = 0
 
-    collide_sound = love.audio.newSource("collide.wav", "static")
     boom_sound = love.audio.newSource("boom.wav", "static")
 
     status = 'stop'
@@ -52,7 +51,6 @@ function love.update(dt)
         else
             ball.x = ball.x + 10
         end
-        love.audio.play(collide_sound)
     end
     -- 比分状态
     if ball.x < 0 then

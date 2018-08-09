@@ -8,6 +8,7 @@ function Ball:init(x, y, radius)
     self.radius = radius
     self.dx = 0
     self.dy = 0
+    self.collide_sound = love.audio.newSource("collide.wav", "static")
 end
 
 function Ball:update(dt)
@@ -19,6 +20,7 @@ function Ball:update(dt)
         else
             self.y = self.y + self.radius
         end
+        self:collide_bgm()
     end
 
     self.x = self.x + self.dx * dt
@@ -26,12 +28,21 @@ function Ball:update(dt)
 end
 
 function Ball:collide(paddle)
-    return self.x < paddle.x + paddle.width and paddle.x < self.x + self.radius and self.y < paddle.y + paddle.height and paddle.y < self.y + self.radius
+    result = self.x < paddle.x + paddle.width and paddle.x < self.x + self.radius and self.y < paddle.y + paddle.height and paddle.y < self.y + self.radius
+
+    if result then
+        self:collide_bgm()
+    end
+    return result
 end
 
 function Ball:render()
     love.graphics.setColor(0, 255, 0)
     love.graphics.circle('fill', self.x, self.y, self.radius)
+end
+
+function Ball:collide_bgm()
+    love.audio.play(self.collide_sound)
 end
 
 function Ball:reset()
