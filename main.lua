@@ -15,10 +15,13 @@ function love.load()
     wg_font = love.graphics.newFont('waltographUI.ttf', 50)
     ball = Ball(WIDTH/2, HEIGHT/2, 10)
     
-    p1 = Paddle(0, HEIGHT/2 - 20, 10, 40)
-    p2 = Paddle(WIDTH-10, HEIGHT/2 - 20, 10, HEIGHT-20)
+    p1 = Paddle(0, HEIGHT/2 - 20, 10, 100)
+    p2 = Paddle(WIDTH-10, HEIGHT/2 - 20, 10, 100)
     p1_score = 0
     p2_score = 0
+
+    collide_sound = love.audio.newSource("collide.wav", "static")
+    boom_sound = love.audio.newSource("boom.wav", "static")
 
     status = 'stop'
 end
@@ -49,17 +52,20 @@ function love.update(dt)
         else
             ball.x = ball.x + 10
         end
+        love.audio.play(collide_sound)
     end
     -- 比分状态
     if ball.x < 0 then
         p2_score = p2_score + 1
         ball:reset()
         status = "stop"
+        love.audio.play(boom_sound)
     end
     if ball.x > WIDTH then
         p1_score = p1_score + 1
         ball:reset()
         status = "stop"
+        love.audio.play(boom_sound)
     end
 
     ball:update(dt)
